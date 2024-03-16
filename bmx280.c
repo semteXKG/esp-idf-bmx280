@@ -349,6 +349,30 @@ esp_err_t bmx280_init(bmx280_t* bmx280)
     return error;
 }
 
+esp_err_t bmx280_init_with_address(bmx280_t* bmx280, uint8_t address)
+{
+    if (bmx280 == NULL) return ESP_ERR_INVALID_ARG;
+    
+    bmx280->slave = address;
+
+    esp_err_t error = bmx280_reset(bmx280);
+
+    if (error == ESP_OK)
+    {
+        // Give the sensor 10 ms delay to reset.
+        vTaskDelay(pdMS_TO_TICKS(10));
+
+        // Read calibration data.
+        bmx280_calibrate(bmx280);
+
+        ESP_LOGI("bmx280", "Dumping calibration...");
+        ESP_LOG_BUFFER_HEX("bmx280", &bmx280->cmps, sizeof(bmx280->cmps));
+    }
+
+    return error;
+}
+
+
 esp_err_t bmx280_configure(bmx280_t* bmx280, bmx280_config_t *cfg)
 {
     if (bmx280 == NULL || cfg == NULL) return ESP_ERR_INVALID_ARG;

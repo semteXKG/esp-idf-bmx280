@@ -45,6 +45,14 @@ BMXAPI void bmx280_close(bmx280_t* bmx280);
  * @param bmx280 Driver structure.
  */
 BMXAPI esp_err_t bmx280_init(bmx280_t* bmx280);
+
+/**
+ * Probe for the sensor and read calibration data.
+ * @param bmx280 Driver structure.
+ * @param address the i²c bus address of the device.
+ */
+BMXAPI esp_err_t bmx280_init_with_address(bmx280_t* bmx280, uint8_t address);
+
 /**
  * Configure the sensor with the given parameters.
  * @param bmx280 Driver structure.
